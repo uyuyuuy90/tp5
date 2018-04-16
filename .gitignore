@@ -1,3 +1,7 @@
 .idea
 composer.lock
 *.log
+
+.settings
+.project
+.buildpath
