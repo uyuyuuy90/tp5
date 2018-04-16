@@ -12,7 +12,7 @@
 // 应用公共文件
 
 
-function get_random_str($model = 0, int $length = 4)
+function get_random_str($model = 0, $length = 4)
 {
 	$str_arr = [
 		'0123456789',
