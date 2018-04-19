@@ -9,6 +9,7 @@ use app\api\model;
 class Common extends Controller
 {
     protected $request = NULL;
+    
     public function __construct()
     {
         parent::__construct();
