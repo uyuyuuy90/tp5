@@ -1,5 +1,5 @@
 <?php
-namespace app\api\model;
+namespace app\common\model;
 
 use think\Model;
 use think\Db;
@@ -25,9 +25,9 @@ class User extends Model
     /**
      * 编辑用户
      */
-    public function edit_user($data = array())
+    public function edit_user($where = array(), $data = array())
     {
-        return Db::table($this->table)->update($data);
+        return Db::table($this->table)->where($where)->update($data);
     }
     
     

@@ -2,8 +2,7 @@
 namespace app\api\controller;
 
 use think\Controller;
-use think\Request;
-use app\api\model;
+use app\common\model;
 
 
 class Common extends Controller
@@ -13,7 +12,6 @@ class Common extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->request = Request::instance();
         $user_id = intval($this->request->post('user_id'));
         
         if ($user_id) {

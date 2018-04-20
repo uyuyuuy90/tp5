@@ -1,5 +1,5 @@
 <?php
-namespace app\api\model;
+namespace app\common\model;
 
 use think\Model;
 use think\Db;
@@ -25,9 +25,9 @@ class Goods extends Model
     /**
      * 编辑商品
      */
-    public function edit_goods($data = array())
+    public function edit_goods($where = array(), $data = array())
     {
-        return Db::table($this->table)->update($data);
+        return Db::table($this->table)->where($where)->update($data);
     }
     
     
@@ -45,6 +45,9 @@ class Goods extends Model
      */
     public function get_goods_list($where = array())
     {
+        if (!$where) {
+            $where = '1 = 1';
+        }
         return Db::table($this->table)->where($where)->select();
     }
     

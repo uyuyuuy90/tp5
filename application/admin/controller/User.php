@@ -1,50 +1,13 @@
 <?php
-namespace app\api\controller;
+namespace app\admin\controller;
 
-use app\api\controller\Common;
+use app\admin\controller\Common;
 use app\common\model;
+use think\Session;
 
 class User extends Common
 {
     
-    /**
-     * 用户注册
-     */
-    public function regist()
-    {
-        if ($this->request->isPost()) {
-            $username = $this->request->post('username');
-            $password = $this->request->post('password');
-            
-            $random_str = get_random_str(2, 6);
-            $secret_key = md5($random_str);
-            $add_time = time();
-            $password_encrypt = md5(substr(md5($password), 0, 16).substr($secret_key, 0, 16));
-//             $ip = $this->request->ip();
-            $sex = intval($this->request->post('sex'));
-            
-            $data = [
-                'username' => $username,
-                'password' => $password_encrypt,
-                'secret_key' => $secret_key,
-                'sex' => $sex,
-                'add_time' => $add_time
-            ];
-            
-            $user_model = new model\User();
-            $add_result = $user_model->add_user($data);
-            
-            return $add_result;
-            
-        } else {
-            
-            $this->assign('name', '注册');
-            return $this->fetch();
-        }
-
-    }
-    
-
     /**
      * 用户登录
      */
@@ -68,7 +31,17 @@ class User extends Common
 				$user_data['username'] = $user_info['username'];
 				$user_data['sex'] = $user_info['sex'];
 				$user_data['last_login_time'] = date('Y-m-d H:i:s', $user_info['last_login_time']);
-
+				$user_data['last_login_ip'] = $user_info['last_login_ip'];
+                
+				Session::set('user_info',$user_data);
+				
+				$update_where = ['id' => $user_info['id']];
+				$update_data = array(
+				    'last_login_time' => time(),
+				    'last_login_ip' => $this->request->ip()
+				);
+				$user_model->edit_user($update_where, $update_data);
+				
 				return $user_data;
 				
 			} else {
@@ -87,7 +60,7 @@ class User extends Common
      */
     public function update_password()
     {
-        $user_id = $this->request->post('user_id');
+        $user_id = Session::get('user_info')['user_id'];
         $current_password = $this->request->post('current_password');
         $new_password = $this->request->post('new_password');
         
